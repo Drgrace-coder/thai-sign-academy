@@ -1,0 +1,207 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#fff2da">
+<title>Thai Sign Academy</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,sans-serif;background:linear-gradient(160deg,#dff7ff,#fff3df 60%,#ffe1eb);color:#55465e;min-height:100vh}
+main{max-width:720px;margin:auto;padding:20px 16px 60px}
+h1,h2,h3{text-align:center}
+h1{color:#e875a0;font-size:2rem}
+p{line-height:1.6}
+.card{background:#ffffffed;border:3px solid #fff;border-radius:25px;padding:20px;margin:15px 0;box-shadow:0 8px 22px #a78b9a20}
+button{border:0;border-radius:18px;background:#f8a8c5;color:#533a4d;padding:13px 18px;font-size:16px;font-weight:700;cursor:pointer;margin:5px}
+button:active{transform:scale(.97)}
+button:disabled{opacity:.4;cursor:not-allowed}
+.primary{background:#a7e6cb}
+.secondary{background:#d5d5ff}
+input{width:100%;padding:15px;border:2px solid #f8c3d5;border-radius:15px;font-size:18px}
+.center{text-align:center}
+.hidden{display:none}
+.hero{font-size:75px;text-align:center}
+.small{font-size:13px;color:#887987}
+.lesson{display:flex;align-items:center;gap:12px;background:#fff5e6;border-radius:18px;padding:12px;margin:10px 0}
+.lesson span{font-size:32px}
+.lesson div{flex:1}
+.row{display:flex;flex-wrap:wrap;justify-content:center}
+.teacher{font-size:90px}
+.stage{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stage>div{background:#f8f4ff;border-radius:20px;padding:18px;text-align:center}
+.hand{font-size:82px;display:inline-block;transition:transform .5s}
+.hand.move{animation:wave .8s ease-in-out 3}
+@keyframes wave{0%,100%{transform:rotate(-15deg)}50%{transform:rotate(22deg)}}
+.progress{height:14px;background:#eee;border-radius:20px;overflow:hidden}
+.fill{height:100%;background:#8ad9b5;transition:width .3s}
+.answer{display:block;width:100%;margin:10px 0;background:#e5f3ff}
+.note{background:#fff1c7;border-radius:15px;padding:12px;font-size:13px}
+.badge{display:inline-block;background:#fff1ad;padding:8px 14px;border-radius:30px}
+footer{text-align:center;font-size:12px;color:#877987;margin-top:30px}
+</style>
+</head>
+<body>
+<main>
+<h1>🌸 Thai Sign Academy 🌸</h1>
+<p class="center">โลกแห่งการเรียนรู้ภาษามือไทย</p>
+
+<section id="welcome" class="card">
+<div class="hero">🐰🌷</div>
+<h2>ยินดีต้อนรับ!</h2>
+<p class="center">มาสำรวจห้องเรียนแสนสนุกกันเถอะ</p>
+<label>ชื่อเล่นของคุณ</label>
+<input id="nickname" maxlength="20" placeholder="พิมพ์ชื่อเล่น">
+<div class="center"><button class="primary" onclick="start()">เริ่มผจญภัย ✨</button></div>
+</section>
+
+<section id="home" class="hidden">
+<div class="card center">
+<div class="hero">🏡🐻</div>
+<h2 id="greeting"></h2>
+<p id="stats"></p>
+<div class="progress"><div class="fill" id="progress"></div></div>
+<p class="small">ความคืบหน้าการเรียน</p>
+<button onclick="show('teachers')">👩‍🏫 เลือกคุณครู</button>
+<button class="secondary" onclick="show('profile')">🏅 โปรไฟล์</button>
+</div>
+<div class="card">
+<h2>🗺️ แผนที่บทเรียน</h2>
+<div id="lessonList"></div>
+</div>
+</section>
+
+<section id="teachers" class="card hidden center">
+<h2>เลือกคุณครู</h2>
+<div class="row">
+<div>
+<div class="teacher">👩🏻‍🏫</div>
+<button onclick="chooseTeacher('girl')">ครูมินต์ 🌷</button>
+</div>
+<div>
+<div class="teacher">👨🏻‍🏫</div>
+<button onclick="chooseTeacher('boy')">ครูต้น 🌟</button>
+</div>
+</div>
+<p class="small">เปลี่ยนครูได้ตลอดเวลา</p>
+<button class="secondary" onclick="show('home')">กลับบ้าน</button>
+</section>
+
+<section id="classroom" class="card hidden">
+<h2 id="lessonTitle"></h2>
+<p class="center" id="lessonDesc"></p>
+<div class="stage">
+<div>
+<h3>คุณครู</h3>
+<div class="teacher" id="teacherView">👩🏻‍🏫</div>
+<p id="teacherName"></p>
+</div>
+<div>
+<h3>ฝึกสังเกตมือ</h3>
+<div class="hand" id="hand">👋</div>
+<p class="small">ภาพเคลื่อนไหวสาธิต</p>
+</div>
+</div>
+<p class="note">⚠️ ภาพมือในเกมทดลองเป็นเพียงภาพประกอบ ยังไม่ใช่ท่าภาษามือไทยที่ผ่านการตรวจสอบจากผู้เชี่ยวชาญ</p>
+<div class="center">
+<button onclick="animateHand()">▶ เล่นอีกครั้ง</button>
+<button class="primary" onclick="openQuiz()">ไปทำแบบทดสอบ ➜</button>
+<button class="secondary" onclick="show('home')">กลับแผนที่</button>
+</div>
+</section>
+
+<section id="quiz" class="card hidden">
+<h2>⭐ แบบทดสอบ</h2>
+<p id="question"></p>
+<div id="answers"></div>
+<p id="feedback" class="center"></p>
+<div class="center">
+<button class="secondary" onclick="show('classroom')">ย้อนกลับ</button>
+</div>
+</section>
+
+<section id="profile" class="card hidden center">
+<div class="hero">🏆</div>
+<h2>สมุดสะสมดาว</h2>
+<p id="profileText"></p>
+<div class="badge" id="achievement"></div>
+<p>เรียนรู้วันละนิด เก่งขึ้นทุกวัน!</p>
+<button class="secondary" onclick="show('home')">กลับบ้าน</button>
+</section>
+
+<footer>Thai Sign Academy • Free learning prototype</footer>
+</main>
+<script>
+const lessons=[
+{title:"บทที่ 1: รู้จักห้องเรียน",icon:"🌷",desc:"มารู้จักการเรียนภาษามือและการสังเกตมือกัน",question:"เวลาเรียนภาษามือ เราควรสังเกตอะไร?",options:["เฉพาะสีเสื้อ","มือ สีหน้า และการเคลื่อนไหว","เฉพาะเสียงพูด"],correct:1},
+{title:"บทที่ 2: เรียนรู้ด้วยสายตา",icon:"🌈",desc:"ฝึกมองรายละเอียดของการเคลื่อนไหวและสีหน้า",question:"หากดูท่าทางไม่ทัน ควรทำอย่างไร?",options:["กดเล่นซ้ำและดูช้า ๆ","เดาสุ่มทันที","ข้ามการเรียน"],correct:0},
+{title:"บทที่ 3: ฝึกฝนอย่างมั่นใจ",icon:"⭐",desc:"ทบทวนสิ่งที่เรียนและเตรียมพบกับท่าภาษามือจริงในอนาคต",question:"ท่าภาษามือไทยที่ถูกต้องควรตรวจสอบกับใคร?",options:["ภาพ AI ที่สร้างขึ้นอย่างเดียว","คนที่ไม่เคยเรียน","ผู้เชี่ยวชาญและผู้ใช้ภาษามือไทย"],correct:2}
+];
+let data={name:"",teacher:"girl",done:[]};
+try{const saved=JSON.parse(localStorage.getItem("tsa-save"));if(saved&&saved.name)data=saved}catch(e){}
+let current=0;
+function save(){localStorage.setItem("tsa-save",JSON.stringify(data))}
+function show(id){
+document.querySelectorAll("main section").forEach(s=>s.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+if(id==="home")renderHome();
+if(id==="profile")renderProfile();
+window.scrollTo(0,0)
+}
+function start(){
+const name=document.getElementById("nickname").value.trim();
+if(!name){alert("กรุณาใส่ชื่อเล่นก่อนนะ 🌷");return}
+data.name=name;save();show("teachers")
+}
+function chooseTeacher(t){data.teacher=t;save();show("home")}
+function renderHome(){
+document.getElementById("greeting").textContent="สวัสดี "+data.name+"! 💖";
+document.getElementById("stats").textContent="⭐ "+data.done.length*10+" คะแนน • เรียนจบ "+data.done.length+"/3 บท";
+document.getElementById("progress").style.width=(data.done.length/3*100)+"%";
+document.getElementById("lessonList").innerHTML=lessons.map((l,i)=>{
+const unlocked=i===0||data.done.includes(i-1);
+const completed=data.done.includes(i);
+return '<div class="lesson"><span>'+l.icon+'</span><div><b>'+l.title+'</b><p class="small">'+(completed?"✅ ผ่านแล้ว":unlocked?"พร้อมเรียน":"🔒 ยังล็อกอยู่")+'</p></div><button '+(!unlocked?"disabled":"")+' onclick="openLesson('+i+')">'+(completed?"ทบทวน":unlocked?"เข้าเรียน":"ล็อก")+'</button></div>'
+}).join("")
+}
+function openLesson(i){
+if(i>0&&!data.done.includes(i-1))return;
+current=i;
+document.getElementById("lessonTitle").textContent=lessons[i].title;
+document.getElementById("lessonDesc").textContent=lessons[i].desc;
+document.getElementById("teacherView").textContent=data.teacher==="girl"?"👩🏻‍🏫":"👨🏻‍🏫";
+document.getElementById("teacherName").textContent=data.teacher==="girl"?"ครูมินต์":"ครูต้น";
+document.getElementById("hand").textContent=["👋","✋","🤲"][i];
+show("classroom")
+}
+function animateHand(){
+const h=document.getElementById("hand");
+h.classList.remove("move");void h.offsetWidth;h.classList.add("move")
+}
+function openQuiz(){
+const l=lessons[current];
+document.getElementById("question").textContent=l.question;
+document.getElementById("feedback").textContent="";
+document.getElementById("answers").innerHTML=l.options.map((a,i)=>'<button class="answer" onclick="answer('+i+')">'+a+'</button>').join("");
+show("quiz")
+}
+function answer(i){
+const l=lessons[current];
+if(i!==l.correct){
+document.getElementById("feedback").textContent="ลองอีกครั้งนะ 🌷";
+return
+}
+if(!data.done.includes(current))data.done.push(current);
+save();
+document.getElementById("feedback").textContent="ถูกต้อง! รับ 10 ดาว ⭐";
+document.getElementById("answers").innerHTML='<div class="center"><button class="primary" onclick="show(\'home\')">กลับแผนที่ 🎉</button></div>'
+}
+function renderProfile(){
+document.getElementById("profileText").textContent=data.name+" • "+data.done.length*10+" ดาว • ผ่าน "+data.done.length+" บท";
+document.getElementById("achievement").textContent=data.done.length===3?"🏆 นักสำรวจดาวทอง":data.done.length>0?"🌟 นักเรียนคนเก่ง":"🌱 นักสำรวจมือใหม่"
+}
+if(data.name)show("home");else show("welcome");
+</script>
+</body>
+</html>
